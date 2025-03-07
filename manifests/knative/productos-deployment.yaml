@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: productos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: productos
+  template:
+    metadata:
+      labels:
+        app: productos
+    spec:
+      containers:
+        - name: productos
+          image: lodeonsmm/productos:v3.1
+          ports:
+            - containerPort: 8081
+          

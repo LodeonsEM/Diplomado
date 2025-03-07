@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: productos
+  labels:
+    app: productos
+spec:
+  containers:
+    - name: productos
+      image: lodeonsmm/productos:v4
+      ports:
+        - containerPort: 8081
+
