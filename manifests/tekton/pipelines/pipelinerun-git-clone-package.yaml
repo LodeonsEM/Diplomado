@@ -12,7 +12,7 @@ spec:
     name: pipeline-clone-package
   params:
     - name: repo-url
-      value: https://github.com/LodeonsEM/DiplomadoP.git
+      value: https://github.com/LodeonsEM/Diplomado.git
     - name: maven-image
       value: gcr.io/cloud-builders/mvn@sha256:8f38a2667125a8d83f6e1997847fedb6a06f041c90e2244884153d85d95f869b
     - name: image
