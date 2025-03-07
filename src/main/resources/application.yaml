@@ -1,0 +1,10 @@
+server:
+  port: 8081
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://enriquemarestcp:Lodeons1234@cluster0.cv2so.mongodb.net/productos
+      database: productos
+      username: enriquemarestcp
+      password: Lodeons1234
