@@ -1,0 +1,87 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline-clone-package
+spec:
+  description: |
+    This pipeline clones a repository and builds the project using Maven.
+  params:
+    - name: repo-url
+      type: string
+    - name: maven-image
+      type: string
+    - name: image
+      type: string
+  workspaces:
+    - name: workspace
+    - name: maven-settings
+    - name: dockerconfig
+    - name: kubeconfig-dir #
+    - name: manifest-dir   #
+  tasks:
+    - name: fetch-repository
+      taskRef:
+        kind: Task
+        name: git-clone
+      params:
+        - name: url # <- this is the git-clone param
+          value: $(params.repo-url) # <- a reference to param
+        - name: deleteExisting
+          value: "true"
+      workspaces:
+        - name: output # <- should be the same as the git-clone task
+          workspace: workspace # <- the workspace defined above
+    - name: maven
+      taskRef:
+        name: maven
+      runAfter: # <- the task should start once fetch-repository ends
+        - fetch-repository
+      params:
+        - name: GOALS
+          value:
+            - -B
+            - -DskipTests
+            - clean
+            - package
+        - name: MAVEN_IMAGE
+          value: $(params.maven-image)
+      workspaces:
+        - name: maven-settings
+          workspace: maven-settings
+        - name: source # <- name of the workspace expected by the Task
+          workspace: workspace
+    - name: build
+      taskRef:
+        name: buildah
+      runAfter:
+        - maven
+      params:
+        - name: IMAGE
+          value: $(params.image)
+        - name: TLSVERIFY
+          value: 'false'
+        - name: STORAGE_DRIVER
+          value: 'vfs'
+      workspaces:
+        - name: source
+          workspace: workspace
+        - name: dockerconfig
+          workspace: dockerconfig 
+    - name: update-deployment
+      taskRef:
+        name: kubernetes-actions
+      runAfter:
+        - build
+      params:
+        - name: script
+          value: |
+            kubectl patch deployment $1 --patch='{"spec":{"template":{"spec":{"containers":[{"name": "'$1'","image": "'$2'"}]}}}}'
+        - name: args
+          value:
+            - "productos"  # Nombre del deployment
+            - "$(params.image)"      # Usa el parámetro del pipeline
+      workspaces:
+        - name: kubeconfig-dir
+          workspace: kubeconfig-dir
+        - name: manifest-dir
+          workspace: manifest-dir

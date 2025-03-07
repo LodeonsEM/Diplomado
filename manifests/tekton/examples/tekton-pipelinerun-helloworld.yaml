@@ -1,0 +1,17 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: pipelinerun-helloworld-
+  namespace: diploe2-emm
+spec:
+  serviceAccountName: tekton-sa
+  pipelineRef:
+    name: pipeline-hello-world
+  params:
+    - name: your-name
+      value: "Enrique Mares"
+    - name: repo-url
+      value: https://github.com/LodeonsEM/Diplomado.git
+  workspaces:
+    - name: empty-dir
+      emptyDir: {} 

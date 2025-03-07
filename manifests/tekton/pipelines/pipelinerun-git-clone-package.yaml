@@ -1,0 +1,36 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: pipelinerun-clone-package-
+  namespace: diploe2-emm
+spec:
+  serviceAccountName: tekton-sa
+  podTemplate:
+    securityContext:
+      fsGroup: 65532
+  pipelineRef:
+    name: pipeline-clone-package
+  params:
+    - name: repo-url
+      value: https://github.com/LodeonsEM/DiplomadoP.git
+    - name: maven-image
+      value: gcr.io/cloud-builders/mvn@sha256:8f38a2667125a8d83f6e1997847fedb6a06f041c90e2244884153d85d95f869b
+    - name: image
+      value: docker.io/lodeonsmm/productos:v3.1 
+  workspaces:
+    - name: maven-settings
+      configmap:
+        name: maven-settings
+    - name: workspace
+      persistentVolumeClaim:
+        claimName: workspace
+    - name: dockerconfig
+      secret:
+        secretName: dockerhub-secret
+        items:
+          - key: .dockerconfigjson
+            path: config.json 
+    - name: kubeconfig-dir
+      emptyDir: {}
+    - name: manifest-dir
+      emptyDir: {}
