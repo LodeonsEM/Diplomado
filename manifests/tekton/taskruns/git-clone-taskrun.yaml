@@ -12,7 +12,7 @@ spec:
       fsGroup: 65532
   params:
     - name: url
-      value: https://github.com/LodeonsEM/DiplomadoP.git
+      value: https://github.com/LodeonsEM/Diplomado.git
     - name: deleteExisting
       value: "true"
   workspaces:
