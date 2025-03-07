@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  generateName: buildah-run-
+  namespace: diploe2-emm
+spec:
+  taskRef:
+    name: buildah
+  params:
+    - name: IMAGE
+      value: "docker.io/lodeonsmm/productos:v3.1"
+    - name: TLSVERIFY
+      value: 'false'
+    - name: STORAGE_DRIVER
+      value: 'vfs'
+  workspaces:
+    - name: source
+      persistentVolumeClaim:
+        claimName: workspace
+    - name: dockerconfig
+      secret:
+        secretName: dockerhub-secret
+        items:
+          - key: .dockerconfigjson  
+            path: config.json       
