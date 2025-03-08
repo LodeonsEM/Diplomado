@@ -20,28 +20,30 @@
 - Salida que comunica el resultado final de una tarea  específica.
 ## Ejemplo de ejecución de una tarea
 #### En este caso, se mostrará un ejemplo de ejecución en Tekton que tiene como resultado el mensaje: Hello, World from Tekton!
-1. Primero, se crea un archivo llamado "hello-world-task.yaml", el cual define la tarea encargada de mostrar el mensaje.
+1. Primero, se crea un archivo llamado `hello-world-task.yaml`, el cual define la tarea encargada de mostrar el mensaje.
 ![image](https://github.com/user-attachments/assets/9373da38-74ef-45f2-9ff5-26a446ccc60d)
 
-3. Se despliega la tarea definida en el archivo `hello-world-task.yaml` utilizando el siguiente comando:  
-`kubectl apply -f hello-world-task.yaml -n diploe2-emm`
-
-4. Se verifica que la tarea haya sido desplegada correctamente.
+2. Se despliega la tarea definida en el archivo `hello-world-task.yaml` utilizando el siguiente comando:  
+   ```
+   kubectl apply -f hello-world-task.yaml -n diploe2-emm`
+   ```
+3. Se verifica que la tarea haya sido desplegada correctamente.
 ![image](https://github.com/user-attachments/assets/1dd2c70e-dc52-46e6-a391-507e9dc192c5)
 
-5. Se crea un archivo llamado `hello-world-run.yaml`, que se encargará de ejecutar la tarea previamente configurada.
+4. Se crea un archivo llamado `hello-world-run.yaml`, que se encargará de ejecutar la tarea previamente configurada.
 ![image](https://github.com/user-attachments/assets/c2cd1b22-468e-4e6e-b31b-007bc889d47c)
 
-6. Se despliega el TaskRun definido en `hello-world-run.yaml` con el comando:  
-`kubectl create -f hello-world-run.yaml -n diploe2-emm`
-
-7. Se comprueba que el TaskRun se haya ejecutado exitosamente.
+5. Se despliega el TaskRun definido en `hello-world-run.yaml` con el comando:  
+   ```
+   kubectl create -f hello-world-run.yaml -n diploe2-emm`
+   ```
+6. Se comprueba que el TaskRun se haya ejecutado exitosamente.
 ![image](https://github.com/user-attachments/assets/b12f6dc4-d0e8-4759-afcd-1b8c947980c7)
 
-8. Se verifica el pod generado durante la ejecución del TaskRun.
+7. Se verifica el pod generado durante la ejecución del TaskRun.
 ![image](https://github.com/user-attachments/assets/4a0150cf-4304-410b-affd-be0f1d063558)
 
-9. Finalmente, se revisa el resultado de la tarea a través de los logs generados por el pod correspondiente.
+8. Finalmente, se revisa el resultado de la tarea a través de los logs generados por el pod correspondiente.
 ![image](https://github.com/user-attachments/assets/46262016-0ea9-48e2-a7c1-12e7f950d891)
 
 ## Construcción de una Aplicación Java mediante Tareas de Tekton
@@ -132,6 +134,40 @@ En este ejemplo, se ilustrará el proceso de creación de una imagen de contened
 
 7. Finalmente, se confirma en DockerHub que la imagen del contenedor ha sido subida correctamente.
 ![image](https://github.com/user-attachments/assets/fd545f3a-9601-4e96-b674-5974cfaa1d84)
+
+## Ejemplo de ejecucion de un Pipeline
+1.	Primero, se crea un archivo llamado `task-echo.yaml`, el cual define la tarea encargada de mostrar el mensaje.
+![image](https://github.com/user-attachments/assets/27ec9cce-0119-4494-9ab0-b9b0837f6afb)
+
+2.	Se despliega la tarea definida en el archivo `task-echo.yaml ` utilizando el siguiente comando:  
+   ```
+   kubectl apply -f task-echo.yaml -n diploe2-emm
+   ```
+3.	crea un archivo llamado `tekton-pipeline-helloworld.yaml`, el cual define la pipeline encargada de utilizar la tarea de task-echo. 
+![image](https://github.com/user-attachments/assets/81c88f69-4b7e-4009-973d-60fde9b5ea82)
+![image](https://github.com/user-attachments/assets/709ca490-c6b2-4627-8118-aa2f65736dee)
+
+4.	Se despliega la tarea definida en el archivo `tekton-pipeline-helloworld.yaml` utilizando el siguiente comando:  
+   ```
+   kubectl apply -f tekton-pipeline-helloworld.yaml -n diploe2-emm
+   ```
+5.	Se verifica que la pipeline haya sido desplegada correctamente.
+![image](https://github.com/user-attachments/assets/b1008d7b-cd2f-4a5a-a3b0-d03eacc82fb1)
+
+6.	Se crea un archivo llamado `tekton-pipelinerun-helloworld.yaml`, que se encargará de ejecutar la pipeline previamente configurada.
+![image](https://github.com/user-attachments/assets/d3c43ebe-a66f-4b69-ad28-768349109807)
+
+7.	Se despliega el PipelineRun definido en `tekton-pipelinerun-helloworld.yaml` con el comando:  
+   ```
+   kubectl create -f tekton-pipelinerun-helloworld.yaml -n diploe2-emm
+   ```
+8.	Se verifica que el PipelineRun se haya ejecutado exitosamente.
+![image](https://github.com/user-attachments/assets/d74af9b2-4b50-45da-a34d-296ecb6bc2b3)
+
+9. Finalmente, se revisa el resultado de la tarea a través de los logs generados por el pod correspondiente.
+![image](https://github.com/user-attachments/assets/7788efdf-72bd-40c6-b997-69b4cef0f2ae)
+
+## Construcción de una Aplicación Java mediante Pipelines
 
 ### Conclusión
 Siguiendo este flujo detallado, se logra construir una aplicación Java completa contenerizada y alojada en DockerHub utilizando Tekton para orquestar las tareas correspondientes
