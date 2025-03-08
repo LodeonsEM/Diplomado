@@ -147,7 +147,7 @@ En este ejemplo, se ilustrará el proceso de creación de una imagen de contened
 ![image](https://github.com/user-attachments/assets/81c88f69-4b7e-4009-973d-60fde9b5ea82)
 ![image](https://github.com/user-attachments/assets/709ca490-c6b2-4627-8118-aa2f65736dee)
 
-4.	Se despliega la tarea definida en el archivo `tekton-pipeline-helloworld.yaml` utilizando el siguiente comando:  
+4.	Se despliega el pipeline definido en el archivo `tekton-pipeline-helloworld.yaml` utilizando el siguiente comando:  
    ```
    kubectl apply -f tekton-pipeline-helloworld.yaml -n diploe2-emm
    ```
@@ -168,6 +168,38 @@ En este ejemplo, se ilustrará el proceso de creación de una imagen de contened
 ![image](https://github.com/user-attachments/assets/7788efdf-72bd-40c6-b997-69b4cef0f2ae)
 
 ## Construcción de una Aplicación Java mediante Pipelines
+1. Se reutilizaran las tareas `git-clone`, `maven` y `buildah` instalasdas previamente en la seccion de `Construcción de una Aplicación Java mediante Tareas de Tekton`
+2. Crea un archivo llamado `pipeline-git-clone-package.yaml`, el cual define la pipeline encargada de utilizar las tareas: `git-clone`, `maven`, `buildah` y `kubernetes-action`.
+![image](https://github.com/user-attachments/assets/7808eaa2-f45f-45be-b49d-8e759a75e7a4)
+![image](https://github.com/user-attachments/assets/99545cd0-a2ff-4f34-80fd-ccf60ac3d694)
+![image](https://github.com/user-attachments/assets/d78afc3a-1d84-4c59-99c1-c96aa3988764)
+3. Se despliega el pipeline definido en el archivo ` pipeline-git-clone-package.yaml ` utilizando el siguiente comando:  
+   ```
+   kubectl apply -f pipeline-git-clone-package.yaml -n diploe2-emm
+   ```
+4. Se verifica que la pipeline haya sido desplegada correctamente.
+![image](https://github.com/user-attachments/assets/e5be03d3-dc69-464c-89cd-0f54a469f989)
+5. Se crea un archivo llamado ` pipelinerun-git-clone-package.yaml `, que se encargará de ejecutar la pipeline previamente configurada.
+![image](https://github.com/user-attachments/assets/e75a2340-e2a9-4150-9c53-77a80e011469)
+5. Se despliega el PipelineRun definido en ` pipelinerun-git-clone-package.yaml ` con el comando:  
+   ```
+   kubectl create -f pipelinerun-git-clone-package.yaml -n diploe2-emm
+   ```
+6. Se verifica que el PipelineRun se haya ejecutado exitosamente.
+![image](https://github.com/user-attachments/assets/af078ab0-0dde-4384-957a-d6b8b6c03bf3)
+7. Se verifica los pods generados por las task del pipeline
+![image](https://github.com/user-attachments/assets/658fedbf-7910-4b7d-8760-c93e28e09e53)
+8. Se verifica el pod generado por la taks fetch-repository
+![image](https://github.com/user-attachments/assets/cff4a229-ef61-4adf-8ba1-251ddf6f4935)
+9. Se verifica el pod generado por la taks maven
+![image](https://github.com/user-attachments/assets/9ef3c61e-f01f-472d-a12d-6c1c40cc8c74)
+![image](https://github.com/user-attachments/assets/dac43e54-e586-4095-9c83-7443d961db1d)
+10. Se verifica el pod generado por la taks build
+![image](https://github.com/user-attachments/assets/310121e9-f216-407e-a6c4-2f3af51f0eb4)
+11. Se verifica el pod generado por la update-deployment
+![image](https://github.com/user-attachments/assets/942e688e-4a73-4ffd-a44d-7c793f08ec7e)
+12. Pod con la API-Producto en ejecución
+![image](https://github.com/user-attachments/assets/95e335eb-c12b-48e4-a1af-544e35a2ee95)
 
 ### Conclusión
 Siguiendo este flujo detallado, se logra construir una aplicación Java completa contenerizada y alojada en DockerHub utilizando Tekton para orquestar las tareas correspondientes
