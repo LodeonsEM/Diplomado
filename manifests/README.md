@@ -201,7 +201,62 @@ En este ejemplo, se ilustrará el proceso de creación de una imagen de contened
 12. Pod con la API-Producto en ejecución
 ![image](https://github.com/user-attachments/assets/95e335eb-c12b-48e4-a1af-544e35a2ee95)
 
+## Construcción de una Aplicación Java mediante captura de eventos
+1.  Se crea un archivol yaml que contiene un ServiceAccount y un RoleBinding donde:
+- El ServiceAccount crea una cuenta de servicio para que Tekton Triggers interactúe con el clúster.
+- El RoleBinding Asocia el ServiceAccount tekton-triggers-sa con un ClusterRole, esto otorga los permisos necesarios al EventListener de Tekton para escuchar y responder a eventos
+![image](https://github.com/user-attachments/assets/f0782f08-3da8-4052-82e1-d55cae6d3433)
+2. Se verifica si el namespace se encuentra en el clusterrolebinding
+![image](https://github.com/user-attachments/assets/40dbd4a3-a04a-4f46-a8f6-13307807504b)
+3. Se crea un TriggerTemplate para escuchar un evento y posteriormente crear automáticamente un PipilineRun con los parámetros recibidos y ejecutar el pipeline
+![image](https://github.com/user-attachments/assets/376adab0-fd92-4c19-941e-76a1532072ed)
+![image](https://github.com/user-attachments/assets/b24b8ebd-f303-425d-adaa-a2d13c12bb12)
+4.	Se despliega el archivo `TriggerTemplete.yam` utilizando el siguiente comando:  
+   ```
+   kubectl apply -f TriggerTemplete.yaml -n diploe2-emm
+   ```
+5. Verificar que se deplego el TriggerTemplate 
+![image](https://github.com/user-attachments/assets/36892775-20d0-4fa0-b50d-1870f9f23d8e)
+6. Se crea un TriggerBinding para capturar los datos de un webhook y posteriormente Asigna valores a parámetros para usar en un TriggerTemplate
+7. Se crea un TriggerBinding para capturar los datos de un webhook y posteriormente asigna valores a parámetros para usar en un TriggerTemplate
+![image](https://github.com/user-attachments/assets/b55fde1a-4a18-4dfa-821e-b8b40d35ed61)
+8. Se despliega el archivo `TriggerBinding.yam` utilizando el siguiente comando
+   ```
+   kubectl apply -f `TriggerBinding.yaml` -n diploe2-emm
+   ```
+9. Verificar que se deplego el `TriggerBinding `
+![image](https://github.com/user-attachments/assets/66d4490d-895f-458b-9e1d-7955627fb567)
+10. Crea un EventListener para que actue como servidor HTTP que escucha eventos externos y orquesta la ejecución de pipelines CI/CD.
+![image](https://github.com/user-attachments/assets/4d73c6a0-ca40-4e72-ae03-9bdc60993884)
+11. Se despliega el archivo `EventListener.yam` utilizando el siguiente comando
+   ```
+   kubectl apply -f `EventListener.yaml` -n diploe2-emm
+   ```
+12. Verificar que se deplego el  `EventListener `
+![image](https://github.com/user-attachments/assets/0630dd0c-ea08-4ec0-88e1-e8024d655d64)
+13. Crear un  `Ingress` para exponer el EventListener de Tekton
+![image](https://github.com/user-attachments/assets/a38155c2-1fe4-42ff-9201-25ff37d7be6a)
+14. Realizar la siguiente configuración en el webhook en GitHub de nuestro proyecto que se comunica con el EventListener de Tekton en el cluster
+![image](https://github.com/user-attachments/assets/cda08184-c47d-4603-9e6d-cb2e2907cfb5)
+15. Realiza el despliegue de CI/CD actualizando el README.md del repositorio github y haciendo commit en el branch main
+![image](https://github.com/user-attachments/assets/771f32e1-e9fa-4cd9-ba14-3dfe994aa463)
+16. Revisar si en el webhooks lanzo el evento que capturara el cluster
+![image](https://github.com/user-attachments/assets/acdd8e3b-6a0c-44e4-8a40-e0f13ddd5859)
+17. Verifica la creacion del pipeline y pods, creados por el tiggerTemplete
+![image](https://github.com/user-attachments/assets/7abd7efb-af2d-46ed-862e-a02e4923f60b)
+18. Se verifica los pods creados por las task del pipeline
+![image](https://github.com/user-attachments/assets/38e73c8c-b088-46d5-86e5-5f55495924ae)
+19. Se verifica los logs de cada pod con los resultados de los task:
+- Clonado del repositorio: https://github.com/LodeonsEM/Diplomado.git
+![image](https://github.com/user-attachments/assets/1fb18a8e-a421-4107-9323-497deb69fc29)
+- Creacion de imagen .JAR del aplicativo API-Producto
+![image](https://github.com/user-attachments/assets/a7bbcc78-936d-45dc-8ad9-427b1724e362)
+![image](https://github.com/user-attachments/assets/f10fb2e1-c171-44c8-b5bd-06b92ba90430)
+- Creacion de imagen doker y subirla en el repositorio de dockerhub
+![image](https://github.com/user-attachments/assets/16cc4742-5da9-4528-ab6a-e40d8512ddb0)
+- Despliegue del Api-producto
+![image](https://github.com/user-attachments/assets/e95e7595-2e37-479b-b509-173464a44226)
 ### Conclusión
-Siguiendo este flujo detallado, se logra construir una aplicación Java completa contenerizada y alojada en DockerHub utilizando Tekton para orquestar las tareas correspondientes
+Siguiendo este flujo detallado, se logra clonar un codigo del un repositorio y construir una aplicación Java completa contenerizada, alojada en DockerHub y posteriormente  desplegado la aplicacion utilizando Tekton para orquestar las tareas correspondientes
 
 
