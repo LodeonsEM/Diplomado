@@ -208,7 +208,7 @@ En este ejemplo, se ilustrará el proceso de creación de una imagen de contened
 ![image](https://github.com/user-attachments/assets/f0782f08-3da8-4052-82e1-d55cae6d3433)
 2. Se verifica si el namespace se encuentra en el clusterrolebinding
 ![image](https://github.com/user-attachments/assets/40dbd4a3-a04a-4f46-a8f6-13307807504b)
-3. Se crea un TriggerTemplate para escuchar un evento y posteriormente crear automáticamente un PipilineRun con los parámetros recibidos y ejecutar el pipeline
+3. Se crea un TriggerTemplate para escuchar un evento y posteriormente crear automáticamente un PipilineRun con los parámetros recibidos y ejecutar el pipelinerun utilizando la pipeline `pipeline-git-clone-package` previamente creada
 ![image](https://github.com/user-attachments/assets/376adab0-fd92-4c19-941e-76a1532072ed)
 ![image](https://github.com/user-attachments/assets/b24b8ebd-f303-425d-adaa-a2d13c12bb12)
 4.	Se despliega el archivo `TriggerTemplete.yam` utilizando el siguiente comando:  
