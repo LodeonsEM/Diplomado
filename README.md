@@ -2,7 +2,7 @@
 El Proyecto trata de la creacion de una API-REST mediante el lenguaje JAVA con conexion a Mongo-Atlas, el API realiza:
 - Alta
 - Baja
-- Cambios.
+- Cambios
   
 A un producto de betterware en un registro en la base de datos.
 
